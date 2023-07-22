@@ -38,9 +38,9 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'Shirk/vim-gas'
 
 " For tab
-Plug 'lewis6991/gitsigns.nvim' " OPTIONAL: for git status
-Plug 'nvim-tree/nvim-web-devicons' " OPTIONAL: for file icons it is required to install nerd font.
-Plug 'romgrk/barbar.nvim'
+"Plug 'lewis6991/gitsigns.nvim' " OPTIONAL: for git status
+"Plug 'nvim-tree/nvim-web-devicons' " OPTIONAL: for file icons it is required to install nerd font.
+"Plug 'romgrk/barbar.nvim'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -48,6 +48,12 @@ Plug 'junegunn/fzf.vim'
 Plug 'github/copilot.vim'
 
 Plug 'sbdchd/neoformat'
+
+Plug 'Yggdroot/indentLine'
+
+Plug 'sainnhe/everforest'
+
+Plug 'f-person/git-blame.nvim'
 
 " For gitdiff
 " reference https://github.com/airblade/vim-gitgutter
@@ -95,13 +101,13 @@ nnoremap <silent><C-w>t :NERDTreeFocus<CR>
 " 우측 하단(botright)에 창 생성(new), 해당 창을 terminal 로 변경
 " 크기를 10 으로 재설정(resize) 후 창 높이를 고정(winfixheight)시킴
 " 줄번호는 삭제하고, 터미널 디렉터리 글자색을 변경
-nnoremap <silent><C-j> 
-	\:botright new<CR><bar>
-	\:terminal<CR><bar><ESC>
-	\:resize 10<CR><bar>
-	\:set winfixheight<CR><bar>
-	\:set nonu<CR><bar>
-	\iLS_COLORS=$LS_COLORS:'di=1;33:ln=36'<CR>
+"nnoremap <silent><C-j> 
+"	\:botright new<CR><bar>
+"	\:terminal<CR><bar><ESC>
+"	\:resize 10<CR><bar>
+"	\:set winfixheight<CR><bar>
+"	\:set nonu<CR><bar>
+"	\iLS_COLORS=$LS_COLORS:'di=1;33:ln=36'<CR>
 " ------------------------------------
 " 터미널 모드 
 " ------------------------------------
@@ -154,7 +160,11 @@ if has('nvim')			" nvim 을 사용 중이라면
 endif
 
 " vim 과 OS 의 클립보드 동기화
-set clipboard=unnamed
+if has("unnamedplus")
+    set clipboard=unnamedplus
+else
+    set clipboard=unnamed
+endif
 
 " GUI-Color 를 사용 가능하도록 설정 (TrueColor)
 " cterm 혹은 term 대신 gui 를 통해 색상을 설정할 수 있고
@@ -283,17 +293,17 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 " ------------------------------------
 " nvim-treesitter 설정
 " ------------------------------------
-lua <<EOF
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = "all",
-  ignore_install = { "" },
-  highlight = {
-    enable = true,
-    disable = { "" },
-    additional_vim_regex_highlighting = true,
-  },
-}
-EOF
+"lua <<EOF
+"require'nvim-treesitter.configs'.setup {
+"  ensure_installed = "all",
+"  ignore_install = { "" },
+"  highlight = {
+"    enable = true,
+"    disable = { "" },
+"    additional_vim_regex_highlighting = true,
+"  },
+"}
+"EOF
 " ------------------------------------
 " tagbar 설정
 " ------------------------------------
@@ -317,7 +327,7 @@ let g:airline#extensions#tabline#formatter = 'unique_tail'
 " 창의 상단에 표시되도록 설정
 " let g:airline_statusline_ontop = 1
 " 탭라인 허용
-let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#enabled = 0
 " 항상 tabline 을 표시
 let g:airline#extensions#tabline#show_tabs = 1
 " ------------------------------------
@@ -334,7 +344,6 @@ xnoremap c d
 
 nnoremap cc dd
 nnoremap C Dv
-language en_US
 if has("autocmd")
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal! g'\"" | endif
@@ -401,7 +410,26 @@ set expandtab
 " Prevent vim from automatically scrolling in both split
 set noscrollbind
 set updatetime=100
-autocmd VimEnter * GitGutterLineHighlightsEnable
+"autocmd VimEnter * GitGutterLineHighlightsEnable
 nmap ghs <Plug>(GitGutterStageHunk)
 nmap ghu <Plug>(GitGutterUndoHunk)
 nmap ghp <Plug>(GitGutterPreviewHunk)
+
+
+if has('termguicolors')
+    set termguicolors
+endif
+" For dark version.
+set background=dark
+set conceallevel=0
+
+" Set contrast.
+" This configuration option should be placed before `colorscheme everforest`.
+" Available values: 'hard', 'medium'(default), 'soft'
+let g:everforest_background = 'medium'
+
+" For better performance
+let g:everforest_better_performance = 1
+
+colorscheme everforest
+
